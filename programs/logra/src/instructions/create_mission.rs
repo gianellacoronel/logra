@@ -1,6 +1,8 @@
 use anchor_lang::prelude::*;
 
-use crate::{constants::{MISSION_COUNTER_SEED, MISSION_SEED}, state::{mission::Mission, mission_counter::MissionCounter}};
+use crate::{
+    constants::{MISSION_COUNTER_SEED, MISSION_SEED}, state::{mission::Mission, mission_counter::MissionCounter},
+};
 
 #[derive(Accounts)]
 pub struct CreateMission<'info> {
@@ -23,4 +25,27 @@ pub struct CreateMission<'info> {
     )]
     pub mission: Account<'info, Mission>,
     pub system_program: Program<'info, System>,
+}
+
+pub fn create_mission(
+    ctx: Context<CreateMission>,
+    name: String,
+    description: String,
+    start_at: Option<i64>,
+    end_at: Option<i64>
+) -> Result<()> {
+    let mission = &mut ctx.accounts.mission;
+    let mission_counter = &mut ctx.accounts.mission_counter;
+
+    mission.name = name;
+    mission.description = description;
+    mission.created_at = Clock::get()?.unix_timestamp;
+    mission.start_at = start_at;
+    mission.end_at = end_at;
+    mission.creator = ctx.accounts.creator.key();
+    mission.is_active = true;
+
+    mission_counter.count += 1;
+
+    Ok(())
 }
