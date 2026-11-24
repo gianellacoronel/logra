@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 
 use crate::{
-    constants::{MISSION_COUNTER_SEED, MISSION_SEED}, state::{mission::Mission, mission_counter::MissionCounter},
+    constants::{MISSION_COUNTER_SEED, MISSION_SEED}, error::LograError, state::{mission::Mission, mission_counter::MissionCounter},
 };
 
 #[derive(Accounts)]
@@ -42,6 +42,10 @@ pub fn create_mission(
         mission_counter.count = 0;
     } else {
         require_keys_eq!(ctx.accounts.creator.key(), mission_counter.creator);
+    }
+
+    if let (Some(start), Some(end)) = (start_at, end_at) {
+        require!(end > start, LograError::InvalidDateRange);
     }
 
     mission.name = name;
