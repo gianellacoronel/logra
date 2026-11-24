@@ -37,6 +37,13 @@ pub fn create_mission(
     let mission = &mut ctx.accounts.mission;
     let mission_counter = &mut ctx.accounts.mission_counter;
 
+    if mission_counter.creator == Pubkey::default() {
+        mission_counter.creator = ctx.accounts.creator.key();
+        mission_counter.count = 0;
+    } else {
+        require_keys_eq!(ctx.accounts.creator.key(), mission_counter.creator);
+    }
+
     mission.name = name;
     mission.description = description;
     mission.created_at = Clock::get()?.unix_timestamp;
