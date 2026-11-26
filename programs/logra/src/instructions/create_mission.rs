@@ -50,9 +50,9 @@ pub fn handler(
         require!(end > start, LograError::MissionInvalidDateRange);
     }
 
-    require!(name.trim().is_empty(), LograError::MissionNameEmpty);
+    require!(!name.trim().is_empty(), LograError::MissionNameEmpty);
     require!(
-        description.trim().is_empty(),
+        !description.trim().is_empty(),
         LograError::MissionDescriptionEmpty
     );
 
