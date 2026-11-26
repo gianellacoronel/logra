@@ -22,7 +22,7 @@ pub struct CompleteMission<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn complete_mission(ctx: Context<CompleteMission>) -> Result<()> {
+pub fn handler(ctx: Context<CompleteMission>) -> Result<()> {
     let completion = &mut ctx.accounts.completion;
     let mission = &mut ctx.accounts.mission;
     let current_time = Clock::get()?.unix_timestamp;

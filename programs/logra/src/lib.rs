@@ -6,7 +6,15 @@ pub mod state;
 use anchor_lang::prelude::*;
 
 pub use constants::*;
-pub use instructions::*;
+pub use instructions::create_mission::{
+    CreateMission,
+    __client_accounts_create_mission,
+};
+
+pub use instructions::complete_mission::{
+    CompleteMission,
+    __client_accounts_complete_mission,
+};
 pub use state::*;
 
 declare_id!("9LuaFGGGnZuLENWNywVR5fppfGuH7zYFPY33gmnDhXbK");
@@ -22,7 +30,7 @@ pub mod logra {
         start_at: Option<i64>,
         end_at: Option<i64>,
     ) -> Result<()> {
-        crate::instructions::create_mission::create_mission(
+        crate::instructions::create_mission::handler(
             ctx,
             name,
             description,
@@ -32,6 +40,6 @@ pub mod logra {
     }
 
     pub fn complete_mission(ctx: Context<CompleteMission>) -> Result<()> {
-        crate::instructions::complete_mission::complete_mission(ctx)
+        crate::instructions::complete_mission::handler(ctx)
     }
 }

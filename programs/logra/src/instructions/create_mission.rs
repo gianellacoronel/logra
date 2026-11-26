@@ -29,7 +29,7 @@ pub struct CreateMission<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn create_mission(
+pub fn handler(
     ctx: Context<CreateMission>,
     name: String,
     description: String,
