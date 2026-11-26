@@ -1,11 +1,13 @@
-use anchor_lang::solana_program::system_program;
+use anchor_lang::{
+    prelude::Pubkey,
+    solana_program::system_program,
+    InstructionData,
+    ToAccountMetas,
+};
 use litesvm::LiteSVM;
 use solana_keypair::Keypair;
-use solana_signer::Signer;
-
-use anchor_lang::prelude::Pubkey;
-use anchor_lang::{InstructionData, ToAccountMetas};
 use solana_message::{Instruction, Message};
+use solana_signer::Signer;
 use solana_transaction::Transaction;
 
 #[test]
