@@ -70,4 +70,17 @@ fn test_create_mission() {
         accounts: accounts.to_account_metas(None),
         data: instruction_data.data(),
     };
+
+    // Crear el mensaje de la transacción
+    let message = Message::new(
+        &[instruction],
+        Some(&creator_pubkey)
+    );
+
+    // Crear y firmar la transacción
+    let transaction = Transaction::new(
+        &[&creator],
+        message,
+        svm.latest_blockhash()
+    );
 }
