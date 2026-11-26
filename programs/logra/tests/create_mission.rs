@@ -1,11 +1,11 @@
+use anchor_lang::solana_program::system_program;
 use litesvm::LiteSVM;
-use logra::state::mission_counter;
 use solana_keypair::Keypair;
 use solana_signer::Signer;
 
 use anchor_lang::prelude::Pubkey;
 use anchor_lang::{InstructionData, ToAccountMetas};
-use solana_message::Message;
+use solana_message::{Instruction, Message};
 use solana_transaction::Transaction;
 
 #[test]
@@ -14,9 +14,7 @@ fn test_create_mission() {
     let mut svm = LiteSVM::new();
 
     // Cargar el programa compilado
-    svm.add_program(
-        logra::ID,
-        include_bytes!("../../../target/deploy/logra.so"))
+    svm.add_program(logra::ID, include_bytes!("../../../target/deploy/logra.so"))
         .unwrap();
 
     // Crear wallet de prueba
@@ -47,4 +45,27 @@ fn test_create_mission() {
         ],
         &logra::ID,
     );
+
+    // Data para la instrucción de Crear Misión
+    let instruction_data = logra::instruction::CreateMission {
+        name: "Primera misión".to_string(),
+        description: "Completar mi primera misión en Logra".to_string(),
+        start_at: None,
+        end_at: None,
+    };
+
+    // Cuentas para la instrucción de Crear Misión
+    let accounts = logra::accounts::CreateMission {
+        creator: creator_pubkey,
+        mission_counter: mission_counter_pda,
+        mission: mission_pda,
+        system_program: system_program::ID,
+    };
+
+    // Construir la instrucción
+    let instruction = Instruction {
+        program_id: logra::ID,
+        accounts: accounts.to_account_metas(None),
+        data: instruction_data.data(),
+    };
 }
