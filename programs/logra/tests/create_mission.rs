@@ -83,4 +83,10 @@ fn test_create_mission() {
         message,
         svm.latest_blockhash()
     );
+
+    // ACT: ejecutar la transacción
+    let result = svm.send_transaction(transaction);
+
+    // ASSERT: verificar que la transacción fue exitosa
+    assert!(result.is_ok(), "La creación de la misión falló");
 }
